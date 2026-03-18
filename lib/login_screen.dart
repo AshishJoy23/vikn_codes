@@ -1,4 +1,5 @@
 // import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -35,6 +36,7 @@ class _LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.black,
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           /// 🔥 Animated Background
@@ -50,40 +52,60 @@ class _LoginScreenState extends State<LoginScreen>
 
           /// 🔥 UI Content
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24,vertical: 20),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(
+                left: 24,
+                right: 24,
+                top: 20,
+                bottom: MediaQuery.of(
+                  context,
+                ).viewInsets.bottom, // 🔥 IMPORTANT
+              ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   /// Top Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(Icons.translate, color: const Color(0xff0A9EF3)),
+                      Icon(
+                        Icons.translate,
+                        color: const Color(0xff0A9EF3),
+                        size: 24,
+                      ),
                       SizedBox(width: 6),
                       Text(
                         "English",
-                        style: GoogleFonts.poppins(color: Colors.white70),
+                        style: GoogleFonts.poppins(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
                       ),
                     ],
                   ),
 
-                  Spacer(),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.2),
 
                   /// Title
                   Text(
                     "Login",
                     style: GoogleFonts.poppins(
                       color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 21,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
 
-                  SizedBox(height: 8),
+                  SizedBox(height: 5),
 
                   Text(
                     "Login to your vikn account",
-                    style: GoogleFonts.poppins(color: Colors.white54),
+                    style: GoogleFonts.poppins(
+                      color: Color(0xff838383),
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15,
+                    ),
                   ),
 
                   SizedBox(height: 30),
@@ -92,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen>
                   Container(
                     decoration: BoxDecoration(
                       color: Color(0xff08131E),
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(20),
                       border: Border.all(color: Color(0xff1C3347)),
                     ),
                     child: Column(
@@ -104,23 +126,28 @@ class _LoginScreenState extends State<LoginScreen>
                           value: "Savadfarooque",
                         ),
 
-                        Divider(color: Color(0xff1C3347), height: 1),
+                        Divider(
+                          color: Color(0xff1C3347),
+                          height: 1,
+                          thickness: 1,
+                        ),
 
                         /// Password
                         _buildField(
                           icon: Icons.key_outlined,
                           hint: "Password",
                           obscure: obscure,
-                          trailing: IconButton(
-                            icon: Icon(
-                              obscure ? Icons.visibility_off : Icons.visibility,
-                              color: Color(0xff0A9EF3),
-                            ),
-                            onPressed: () {
+                          trailing: InkWell(
+                            onTap: () {
                               setState(() {
                                 obscure = !obscure;
                               });
                             },
+                            child: Icon(
+                              obscure ? Icons.visibility_off : Icons.visibility,
+                              color: Color(0xff0A9EF3),
+                              size: 24,
+                            ),
                           ),
                         ),
                       ],
@@ -134,7 +161,11 @@ class _LoginScreenState extends State<LoginScreen>
                     alignment: Alignment.center,
                     child: Text(
                       "Forgotten Password?",
-                      style: GoogleFonts.poppins(color: Color(0xff0A9EF3)),
+                      style: GoogleFonts.poppins(
+                        color: Color(0xff0A9EF3),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
 
@@ -142,8 +173,9 @@ class _LoginScreenState extends State<LoginScreen>
 
                   /// Sign In Button
                   Container(
-                    width: 130,
-                    height: 50,
+                    width: 125,
+                    height: 48,
+                    padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                     decoration: BoxDecoration(
                       color: Color(0xff0E75F4),
                       borderRadius: BorderRadius.circular(30),
@@ -157,17 +189,21 @@ class _LoginScreenState extends State<LoginScreen>
                             style: GoogleFonts.poppins(
                               color: Colors.white,
                               fontWeight: FontWeight.w400,
-                              fontSize: 16
+                              fontSize: 16,
                             ),
                           ),
                           SizedBox(width: 8),
-                          Icon(Icons.arrow_forward, color: Colors.white),
+                          Icon(
+                            Icons.arrow_forward,
+                            color: Colors.white,
+                            size: 24,
+                          ),
                         ],
                       ),
                     ),
                   ),
 
-                  Spacer(),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.16),
 
                   /// Bottom Text
                   Column(
@@ -204,23 +240,49 @@ class _LoginScreenState extends State<LoginScreen>
     bool obscure = false,
     Widget? trailing,
   }) {
-    return Row(
-      children: [
-        Icon(icon, color: Color(0xff0A9EF3)),
-        SizedBox(width: 12),
-        Expanded(
-          child: TextField(
-            obscureText: obscure,
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              hintText: hint,
-              hintStyle: TextStyle(color: Colors.white38),
-              border: InputBorder.none,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon, color: Color(0xff0A9EF3), size: 24),
+          SizedBox(width: 15),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  hint,
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.poppins(
+                    color: Color(0xff7D7D7D),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                // SizedBox(height: 2),
+                TextField(
+                  obscureText: obscure,
+                  style: GoogleFonts.poppins(
+                    color: Color(0xffFFFFFF),
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  cursorColor: Color(0xff0A9EF3),
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero,
+                    // hintText: hint,
+                    // hintStyle: TextStyle(color: Colors.white38),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        if (trailing != null) trailing,
-      ],
+          if (trailing != null) trailing,
+        ],
+      ),
     );
   }
 }
@@ -246,14 +308,8 @@ class BackgroundPainter extends CustomPainter {
       final dy = start.dy + (end.dy - start.dy) * progress;
 
       paint.shader = RadialGradient(
-        colors: [
-          color.withValues(alpha: 0.3),
-          color.withValues(alpha: 0.0),
-        ],
-      ).createShader(Rect.fromCircle(
-        center: Offset(dx, dy),
-        radius: radius,
-      ));
+        colors: [color.withValues(alpha: 0.3), color.withValues(alpha: 0.0)],
+      ).createShader(Rect.fromCircle(center: Offset(dx, dy), radius: radius));
 
       canvas.drawCircle(Offset(dx, dy), radius, paint);
     }

@@ -32,7 +32,10 @@ dependencies:
   fl_chart: ^0.68.0
   flutter:
     sdk: flutter
-  google_fonts: 
+  flutter_spinkit: 
+  google_fonts: null
+  http: null
+  shared_preferences: null
 
 dev_dependencies:
   flutter_lints: ^5.0.0

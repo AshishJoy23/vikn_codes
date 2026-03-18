@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:vikn_codes/filter_screen.dart';
-import 'package:vikn_codes/home_screen.dart';
-import 'package:vikn_codes/invoices_screen.dart';
-import 'package:vikn_codes/login_screen.dart';
-import 'package:vikn_codes/profile_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vikn_codes/view/home_tab.dart';
+import 'package:vikn_codes/view/login_screen.dart';
 
-void main() {
+String? token;
+String? userId;
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  token = prefs.getString('token');
+  userId = prefs.getString('userId');
   runApp(const CabZingApp());
 }
 
@@ -18,7 +22,7 @@ class CabZingApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "CabZing",
       theme: ThemeData.dark(),
-      home: const InvoicesScreen (),
+      home: const LoginScreen (),
     );
   }
 }

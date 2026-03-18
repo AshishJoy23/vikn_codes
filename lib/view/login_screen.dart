@@ -1,7 +1,12 @@
 // import 'dart:math';
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vikn_codes/constants/messages.dart';
+import 'package:vikn_codes/controller/api_controller.dart';
+import 'package:vikn_codes/view/home_tab.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,6 +28,9 @@ class _LoginScreenState extends State<LoginScreen>
       duration: Duration(seconds: 6),
     )..repeat(reverse: true);
   }
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -123,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen>
                         _buildField(
                           icon: Icons.person_outline,
                           hint: "Username",
-                          value: "Savadfarooque",
+                          controller: nameController,
                         ),
 
                         Divider(
@@ -136,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen>
                         _buildField(
                           icon: Icons.key_outlined,
                           hint: "Password",
+                          controller: passwordController,
                           obscure: obscure,
                           trailing: InkWell(
                             onTap: () {
@@ -172,33 +181,70 @@ class _LoginScreenState extends State<LoginScreen>
                   SizedBox(height: 30),
 
                   /// Sign In Button
-                  Container(
-                    width: 125,
-                    height: 48,
-                    padding: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Color(0xff0E75F4),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Sign in",
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
+                  InkWell(
+                    onTap: () async {
+                      if (nameController.text.trim().isEmpty &&
+                          passwordController.text.trim().isEmpty) {
+                        showSnackbarMsg(context, 'Enter Login Credentials');
+                      } else {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return Center(
+                              child: SpinKitChasingDots(
+                                color: Color(0xff0A9EF3),
+                              ),
+                            );
+                          },
+                        );
+                        bool isValid = await APIController().getLoginCredential(
+                          nameController.text.trim(),
+                          passwordController.text.trim(),
+                        );
+                        if (isValid) {
+                          Navigator.of(context).pop();
+                          showSnackbarMsg(context, 'Login successfully');
+                          // Navigator.of(context).pushReplacement(
+                          //   MaterialPageRoute(builder: (_) => HomeTab()),
+                          // );
+                        } else {
+                          Navigator.of(context).pop();
+                          showSnackbarMsg(context, 'Invalid User');
+                        }
+                      }
+                    },
+                    child: Container(
+                      width: 125,
+                      height: 48,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xff0E75F4),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "Sign in",
+                              style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(
-                            Icons.arrow_forward,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ],
+                            SizedBox(width: 8),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -236,7 +282,7 @@ class _LoginScreenState extends State<LoginScreen>
   Widget _buildField({
     required IconData icon,
     required String hint,
-    String? value,
+    required TextEditingController controller,
     bool obscure = false,
     Widget? trailing,
   }) {
@@ -262,6 +308,7 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
                 // SizedBox(height: 2),
                 TextField(
+                  controller: controller,
                   obscureText: obscure,
                   style: GoogleFonts.poppins(
                     color: Color(0xffFFFFFF),

@@ -1,9 +1,25 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vikn_codes/controller/api_controller.dart';
+import 'package:vikn_codes/model/profile_model.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+ProfileModel? profileData;
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() async {
+    profileData = await APIController().getProfileData();
+    setState(() {});
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +138,9 @@ class _ProfileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'David Arnold',
+                  profileData!.name == null || profileData!.name!.isEmpty
+                      ? 'No Username'
+                      : profileData!.name!,
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 20,

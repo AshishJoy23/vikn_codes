@@ -1,32 +1,19 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vikn_codes/controller/api_controller.dart';
-import 'package:vikn_codes/model/sales_model.dart';
 import 'package:vikn_codes/view/filter_screen.dart';
 import 'package:vikn_codes/view/widgets/custom_appbar.dart';
 import 'package:vikn_codes/view/widgets/invoice_itemcard.dart';
 
 
-class InvoicesScreen extends StatefulWidget {
-  const InvoicesScreen({super.key});
+class InvoicesScreen extends StatelessWidget {
+  InvoicesScreen({super.key});
 
-  @override
-  State<InvoicesScreen> createState() => _InvoicesScreenState();
-}
-
-class _InvoicesScreenState extends State<InvoicesScreen> {
   final TextEditingController _searchController = TextEditingController();
-  
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
 
+  // @override
   @override
   Widget build(BuildContext context) {
     final appController = Get.put(APIController());
@@ -57,6 +44,7 @@ class _InvoicesScreenState extends State<InvoicesScreen> {
                       ),
                       child: TextField(
                         controller: _searchController,
+                        cursorColor: Color(0xff0A9EF3),
                         onChanged: (val) {
                           appController.getfilteredInvoices(val);
                         },

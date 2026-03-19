@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vikn_codes/controller/api_controller.dart';
 import 'package:vikn_codes/model/profile_model.dart';
+import 'package:vikn_codes/view/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -335,7 +336,10 @@ class _LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        log('message');
+        _showLogoutDialog(context);
+      },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -360,6 +364,66 @@ class _LogoutButton extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF1C1C1E),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            'Logout',
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          content: Text(
+            'Are you sure you want to logout?',
+            style: GoogleFonts.poppins(color: Colors.white, fontSize: 12),
+          ),
+          actions: [
+            // Cancel Button
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // ← closes the dialog
+              },
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.poppins(
+                  color: Color(0xFF8E8E93),
+                  fontSize: 15,
+                ),
+              ),
+            ),
+
+            // Logout Button
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // ← close dialog first
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => LoginScreen()),
+                  (route) => false, // ← removes ALL previous screens from stack
+                );
+              },
+              child: Text(
+                'Logout',
+                style: GoogleFonts.poppins(
+                  color: Color(0xFFFF3B30),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -403,67 +467,3 @@ class _MenuItem extends StatelessWidget {
     );
   }
 }
-
-// class _MenuDivider extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Divider(color: Color(0xFF2C2C2E), height: 1, thickness: 1);
-//   }
-// }
-
-//// ─── Bottom Navigation Bar ───────────────────────────────────────────────────
-
-// class _BottomNavBar extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: const EdgeInsets.only(bottom: 16, top: 10),
-//       decoration: const BoxDecoration(
-//         color: Color(0xFF0D0D0D),
-//         border: Border(top: BorderSide(color: Color(0xFF1C1C1E), width: 1)),
-//       ),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceAround,
-//         children: [
-//           _NavBarItem(icon: Icons.pentagon_outlined, isActive: false),
-//           _NavBarItem(icon: Icons.bookmark_border_rounded, isActive: false),
-//           _NavBarItem(icon: Icons.notifications_none_rounded, isActive: false),
-//           _NavBarItem(icon: Icons.person_outline_rounded, isActive: true),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// class _NavBarItem extends StatelessWidget {
-//   final IconData icon;
-//   final bool isActive;
-
-//   const _NavBarItem({required this.icon, required this.isActive});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       mainAxisSize: MainAxisSize.min,
-//       children: [
-//         Icon(
-//           icon,
-//           color: isActive ? Colors.white : const Color(0xFF636366),
-//           size: 26,
-//         ),
-//         const SizedBox(height: 5),
-//         if (isActive)
-//           Container(
-//             width: 5,
-//             height: 5,
-//             decoration: const BoxDecoration(
-//               color: Colors.white,
-//               shape: BoxShape.circle,
-//             ),
-//           )
-//         else
-//           const SizedBox(height: 5),
-//       ],
-//     );
-//   }
-// }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vikn_codes/controller/api_controller.dart';
 import 'package:vikn_codes/view/invoices_screen.dart';
 
-import '../../controller/api_controller.dart';
 
 class InfoCard extends StatelessWidget {
   final String title;
@@ -25,12 +25,16 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appController = Get.put(APIController());
+    final appController1 = Get.put(APIController());
     return InkWell(
-      onTap: () {
+      onTap: () async{
         if (isInvoice) {
-          // appController.filteredSalesList.clear();
-          // appController.filteredSalesList.value=appController.salesList;
+          await appController1.getAllSalesList();
+          // if (appController1.isLoadingInvoices.value) {
+            
+          // } else {
+            
+          // }
           Navigator.of(
             context,
           ).push(MaterialPageRoute(builder: (_) => InvoicesScreen()));

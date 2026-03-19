@@ -10,7 +10,7 @@ class DateChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: BoxDecoration(
         color: const Color(0xFF1B2B30),
         borderRadius: BorderRadius.circular(30),
@@ -23,7 +23,7 @@ class DateChip extends StatelessWidget {
             color: Color(0xFF0E75F4),
             size: 24,
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Text(
             date,
             style: GoogleFonts.poppins(

@@ -1,7 +1,6 @@
+
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:vikn_codes/controller/api_controller.dart';
 
 class CustomAppbar extends StatelessWidget {
   final bool isFilter;
@@ -9,7 +8,6 @@ class CustomAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appController = Get.put(APIController());
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -17,10 +15,9 @@ class CustomAppbar extends StatelessWidget {
         child: Row(
           children: [
             GestureDetector(
-              onTap: () {Navigator.maybePop(context);
-              appController.filteredSalesList.clear();
-              appController.filteredSalesList.value=appController.salesList;
-              } ,
+              onTap: () {
+                Navigator.of(context).pop();
+              },
               child: const Icon(
                 Icons.arrow_back,
                 color: Colors.white,

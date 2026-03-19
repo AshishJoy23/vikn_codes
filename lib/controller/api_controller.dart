@@ -30,15 +30,19 @@ class APIController extends GetxController {
 
   Future<void> getAllSalesList() async {
     isLoadingInvoices.value = true;
+    filteredSalesList.clear();
+    salesList.clear();
     final response = await APIServices().fetchAllSalesList();
     if (response != null) {
       log('controller get all /////////////');
-    log(salesList.length.toString());
-    log(salesList.toString());
+
       salesList.value = response;
-      filteredSalesList.clear();
       filteredSalesList.value = response;
       isSalesDataAvailable.value = true;
+      log(salesList.length.toString());
+      log(salesList.toString());
+      log(filteredSalesList.length.toString());
+      log(filteredSalesList.toString());
     } else {
       isSalesDataAvailable.value = false;
     }

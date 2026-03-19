@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vikn_codes/controller/api_controller.dart';
 import 'package:vikn_codes/model/profile_model.dart';
@@ -10,19 +13,10 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-ProfileModel? profileData;
-
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
-  void initState() async {
-    profileData = await APIController().getProfileData();
-    setState(() {});
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final appController = Get.put(APIController());
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -49,7 +43,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         children: [
                           // Profile Card
-                          _ProfileCard(),
+                          _ProfileCard(
+                            profile: appController.profileData.value,
+                          ),
                           const SizedBox(height: 16),
 
                           // Stats Row
@@ -101,6 +97,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 // ─── Profile Card ────────────────────────────────────────────────────────────
 
 class _ProfileCard extends StatelessWidget {
+  final ProfileModel? profile;
+  const _ProfileCard({required this.profile});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -115,18 +114,35 @@ class _ProfileCard extends StatelessWidget {
           Container(
             width: 70,
             height: 70,
-            padding: EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.black,
               borderRadius: BorderRadius.circular(16),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                'assets/avatar.png',
+              child: Image.network(
+                profile!.photo!, // ← your URL here
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    const Icon(Icons.person, color: Colors.white54, size: 32),
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1,
+                      color: Color(0xff0A9EF3),
+                    ),
+                  );
+                },
+                errorBuilder: (_, __, ___) {
+                  return Image.asset(
+                    'assets/avatar.png',
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => const Icon(
+                      Icons.person,
+                      color: Colors.white54,
+                      size: 32,
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -138,9 +154,7 @@ class _ProfileCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  profileData!.name == null || profileData!.name!.isEmpty
-                      ? 'No Username'
-                      : profileData!.name!,
+                  profile!.name!,
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 20,
@@ -149,7 +163,7 @@ class _ProfileCard extends StatelessWidget {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  'david012@cabzing',
+                  profile!.email!,
                   style: GoogleFonts.poppins(
                     color: Color(0xFFB5CDFE),
                     fontSize: 14,

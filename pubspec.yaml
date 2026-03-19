@@ -32,15 +32,23 @@ dependencies:
   fl_chart: ^0.68.0
   flutter:
     sdk: flutter
-  flutter_spinkit: 
+  flutter_spinkit: null
+  get: null
   google_fonts: null
   http: null
   shared_preferences: null
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.4
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo.png"   # ← path to your icon image
+  min_sdk_android: 21
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

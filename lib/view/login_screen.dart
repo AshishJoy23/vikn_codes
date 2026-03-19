@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vikn_codes/constants/messages.dart';
 import 'package:vikn_codes/controller/api_controller.dart';
@@ -42,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    final appController = Get.put(APIController());
     return Scaffold(
       // backgroundColor: Colors.black,
       resizeToAvoidBottomInset: true,
@@ -183,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen>
                   /// Sign In Button
                   InkWell(
                     onTap: () async {
-                      if (nameController.text.trim().isEmpty &&
+                      if (nameController.text.trim().isEmpty ||
                           passwordController.text.trim().isEmpty) {
                         showSnackbarMsg(context, 'Enter Login Credentials');
                       } else {
@@ -198,16 +200,18 @@ class _LoginScreenState extends State<LoginScreen>
                             );
                           },
                         );
-                        bool isValid = await APIController().getLoginCredential(
+                        await appController.getLoginCredential(
                           nameController.text.trim(),
                           passwordController.text.trim(),
                         );
-                        if (isValid) {
+                        if (appController.isVerified.value) {
+                          await appController.getProfileData();
+                          await appController.getAllSalesList();
                           Navigator.of(context).pop();
                           showSnackbarMsg(context, 'Login successfully');
-                          // Navigator.of(context).pushReplacement(
-                          //   MaterialPageRoute(builder: (_) => HomeTab()),
-                          // );
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) => HomeTab()),
+                          );
                         } else {
                           Navigator.of(context).pop();
                           showSnackbarMsg(context, 'Invalid User');

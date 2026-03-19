@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:vikn_codes/view/widgets/chips_widget.dart';
+import 'package:vikn_codes/view/widgets/custom_appbar.dart';
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
@@ -32,54 +34,7 @@ class _FilterScreenState extends State<FilterScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ── App Bar ──────────────────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Navigator.maybePop(context),
-                    child: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 14),
-                  Text(
-                    'Filters',
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Spacer(),
-                  // Eye / view icon
-                  SizedBox(
-                    width: 25,
-                    height: 25,
-                    child: Image.asset(
-                      'assets/eye.png',
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => const Icon(
-                        Icons.remove_red_eye_outlined,
-                        color: Color(0xFF0E74F4),
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Text(
-                    'Filter',
-                    style: GoogleFonts.poppins(
-                      color: Color(0xFF0A9EF3),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            CustomAppbar(isFilter: true),
 
             const Divider(color: Color(0xFF1C3347), height: 1),
 
@@ -133,9 +88,9 @@ class _FilterScreenState extends State<FilterScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        _DateChip(date: '12/09/2023'),
+                        DateChip(date: '12/09/2023'),
                         const SizedBox(width: 15),
-                        _DateChip(date: '12/09/2023'),
+                        DateChip(date: '12/09/2023'),
                       ],
                     ),
                     const SizedBox(height: 20),
@@ -150,7 +105,7 @@ class _FilterScreenState extends State<FilterScreen> {
                             (status) => GestureDetector(
                               onTap: () =>
                                   setState(() => _selectedStatus = status),
-                              child: _StatusChip(
+                              child: StatusChip(
                                 label: status,
                                 isSelected: _selectedStatus == status,
                               ),
@@ -207,7 +162,7 @@ class _FilterScreenState extends State<FilterScreen> {
                       runSpacing: 10,
                       children: _selectedTags
                           .map(
-                            (tag) => _TagChip(
+                            (tag) => TagChip(
                               label: tag,
                               onRemove: () =>
                                   setState(() => _selectedTags.remove(tag)),
@@ -322,103 +277,3 @@ class _FilterScreenState extends State<FilterScreen> {
   }
 }
 
-// ─── Date Chip ───────────────────────────────────────────────────────────────
-
-class _DateChip extends StatelessWidget {
-  final String date;
-  const _DateChip({required this.date});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1B2B30),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.calendar_today_outlined,
-            color: Color(0xFF0E75F4),
-            size: 24,
-          ),
-          const SizedBox(width: 10),
-          Text(
-            date,
-            style: GoogleFonts.poppins(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─── Status Chip ─────────────────────────────────────────────────────────────
-
-class _StatusChip extends StatelessWidget {
-  final String label;
-  final bool isSelected;
-  const _StatusChip({required this.label, required this.isSelected});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-      decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFF0E74F4) : const Color(0xFF1B2B30),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Text(
-        label,
-        style: GoogleFonts.poppins(
-          color: Colors.white,
-          fontSize: 15,
-          fontWeight: FontWeight.w400,
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Tag Chip ────────────────────────────────────────────────────────────────
-
-class _TagChip extends StatelessWidget {
-  final String label;
-  final VoidCallback onRemove;
-  const _TagChip({required this.label, required this.onRemove});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1B2B30),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.poppins(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(width: 8),
-          GestureDetector(
-            onTap: onRemove,
-            child: const Icon(Icons.close, color: Color(0xff0A9EF3), size: 16),
-          ),
-        ],
-      ),
-    );
-  }
-}

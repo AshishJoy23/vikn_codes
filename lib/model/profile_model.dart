@@ -10,9 +10,9 @@ class ProfileModel {
       this.photo,});
 
   ProfileModel.fromJson(Map<String, dynamic> json) {
-    name = '${json['first_name']} ${json['last_name']}';
-    email = json['email'];
-    photo = json['photo'];
+    name = '${json['data']['first_name']} ${json['data']['last_name']}';
+    email = json['data']['email'];
+    photo = json['customer_data']['photo'];
   }
 
 }
